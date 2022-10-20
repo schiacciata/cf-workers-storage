@@ -1,0 +1,26 @@
+{
+  "name": "cf-workers-storage",
+  "version": "1.0.0",
+  "description": "Set of utilities to help you manage cloudflare workers storages",
+  "main": "src/index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/schiacciata/cf-workers-storage.git"
+  },
+  "keywords": [
+    "cloudflare"
+  ],
+  "author": "PADO",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/schiacciata/cf-workers-storage/issues"
+  },
+  "homepage": "https://github.com/schiacciata/cf-workers-storage#readme",
+  "devDependencies": {
+    "@cloudflare/workers-types": "^3.17.0",
+    "typescript": "^4.8.4"
+  }
+}
