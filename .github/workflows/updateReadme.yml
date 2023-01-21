@@ -3,7 +3,7 @@ name: Update readme on push
 on:
   push:
     branches:
-      - main
+      - master
   repository_dispatch:
 
 jobs:
