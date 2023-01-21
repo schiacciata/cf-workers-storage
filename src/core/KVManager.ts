@@ -1,24 +1,15 @@
-import { kvs, ClassOptions, getOptions, saveOptions } from "../types/KVManager";
+import { IKVClass, kvs, KVClassOptions, getOptions, setOptions } from "../types/KVManager";
 import Env from "../types/Env";
+import BaseManager from "./Base";
 
-class KVManager implements ClassOptions {
-    isEnabled: boolean;
-    debug: boolean;
+class KVManager extends BaseManager implements IKVClass {
     env: Env;
-    ctx: ExecutionContext;
     kvName: kvs;
-    constructor({
-        isEnabled = true,
-        debug = false,
-        env,
-        ctx,
-        kvName,
-    }: ClassOptions) {
-        this.isEnabled = isEnabled;
-        this.debug = debug;
-        this.env = env;
-        this.ctx = ctx;
-        this.kvName = kvName || 'DEFAULT_KV';
+    constructor(options: KVClassOptions) {
+        super(options);
+
+        this.env = options.env;
+        this.kvName = options.kvName || 'DEFAULT_KV';
     }
 
     public async get({
@@ -32,18 +23,18 @@ class KVManager implements ClassOptions {
         return await this.getKV(kvName).get(key);
     };
 
-    public save({
+    public set({
         kvName,
         key,
         value,
-    }: saveOptions): void {
+    }: setOptions): void {
         if (!this.isEnabled) return this.log('Not enabled');
         if (!key || !value) return this.log('Key or value is missing');
         
         const kv = this.getKV(kvName);
 
         this.log('Saving to kv', { key, kv });
-        return this.ctx.waitUntil(kv.put(key, value));
+        return this.context.waitUntil(kv.put(key, value));
     }
 
     private getKV(name: kvs = this.kvName): KVNamespace {

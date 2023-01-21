@@ -1,28 +1,31 @@
+import { BaseClassOptions, baseMethodsOptions, IBaseClass } from "./Base";
 import Env from "./Env";
 
 type kvs = keyof Env;
-interface ClassOptions {
-    isEnabled: boolean;
-    debug: boolean;
+interface IKVClass extends IBaseClass {
     env: Env;
-    ctx: ExecutionContext;
-    kvName?: kvs;
+    kvName: kvs;
 };
 
-interface baseOptions {
+interface KVClassOptions extends BaseClassOptions {
     kvName?: kvs;
-    key: string;
+    env: Env;
+};
+
+interface baseKVMethodsOptions extends baseMethodsOptions {
+    kvName?: kvs;
 }
 
-type saveOptions = baseOptions & {
+type setOptions = baseKVMethodsOptions & {
     value: string | ReadableStream | ArrayBuffer | ArrayBufferView;
 };
-
-type getOptions = baseOptions;
+type getOptions = baseKVMethodsOptions;
 
 export type {
+    IKVClass,
     kvs,
-    ClassOptions,
-    saveOptions,
+    KVClassOptions,
+    
+    setOptions,
     getOptions,
 }

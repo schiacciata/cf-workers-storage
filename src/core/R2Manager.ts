@@ -1,24 +1,15 @@
-import { buckets, ClassOptions, getOptions, saveOptions } from "../types/R2Manager";
+import { IR2Class, buckets, R2ClassOptions, getOptions, setOptions } from "../types/R2Manager";
 import Env from "../types/Env";
+import BaseManager from "./Base";
 
-class R2Manager implements ClassOptions {
-    isEnabled: boolean;
-    debug: boolean;
+class R2Manager extends BaseManager implements IR2Class {
     env: Env;
-    ctx: ExecutionContext;
     bucketName: buckets;
-    constructor({
-        isEnabled = true,
-        debug = false,
-        env,
-        ctx,
-        bucketName,
-    }: ClassOptions) {
-        this.isEnabled = isEnabled;
-        this.debug = debug;
-        this.env = env;
-        this.ctx = ctx;
-        this.bucketName = bucketName || 'DEFAULT_BUCKET';
+    constructor(options: R2ClassOptions) {
+        super(options);
+
+        this.env = options.env;
+        this.bucketName = options.bucketName || 'DEFAULT_BUCKET';
     }
 
     public async get({
@@ -32,18 +23,18 @@ class R2Manager implements ClassOptions {
         return await this.getBucket(bucketName).get(key);
     };
 
-    public save({
+    public set({
         bucketName,
         key,
         value,
-    }: saveOptions): void {
+    }: setOptions): void {
         if (!this.isEnabled) return this.log('Not enabled');
         if (!key || !value) return this.log('Key or value is missing');
         
         const bucket = this.getBucket(bucketName);
 
         this.log('Saving to bucket', { key, bucket });
-        return this.ctx.waitUntil(bucket.put(key, value));
+        return this.context.waitUntil(bucket.put(key, value));
     }
 
     private getBucket(name: buckets = this.bucketName): R2Bucket {

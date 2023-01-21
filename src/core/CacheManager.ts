@@ -1,20 +1,12 @@
-import { customCaches, ClassOptions, getOptions, saveOptions } from "../types/CacheManager";
+import { ICacheClass, CacheClassOptions, customCaches, getOptions, setOptions } from "../types/CacheManager";
+import BaseManager from "./Base";
 
-class CacheManager implements ClassOptions {
-    isEnabled: boolean;
-    debug: boolean;
-    ctx: ExecutionContext;
+class CacheManager extends BaseManager implements ICacheClass {
     cacheName: customCaches;
-    constructor({
-        isEnabled = true,
-        debug = false,
-        ctx,
-        cacheName,
-    }: ClassOptions) {
-        this.isEnabled = isEnabled;
-        this.debug = debug;
-        this.ctx = ctx;
-        this.cacheName = cacheName || "default";
+    constructor(options: CacheClassOptions) {
+        super(options);
+        
+        this.cacheName = options.cacheName || "default";
     }
 
     public async get({
@@ -28,17 +20,17 @@ class CacheManager implements ClassOptions {
         return await cache.match(key);
     };
 
-    public async save({
+    public async set({
         cacheName,
         key,
         value,
-    }: saveOptions): Promise<void> {
+    }: setOptions): Promise<void> {
         if (!this.isEnabled) return;
         
         const cache = await this.getCache(cacheName);
 
         this.log('Saving to cache', { key, value });
-        return this.ctx.waitUntil(cache.put(key, value.clone()));
+        return this.context.waitUntil(cache.put(key, value.clone()));
     };
 
     private async getCache(name: customCaches = this.cacheName): Promise<Cache> {

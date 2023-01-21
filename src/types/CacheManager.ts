@@ -1,24 +1,28 @@
+import { BaseClassOptions, baseMethodsOptions, IBaseClass } from "./Base";
+
+interface ICacheClass extends IBaseClass {
+    cacheName: customCaches;
+};
+
 type customCaches = keyof CacheStorage;
-interface ClassOptions {
-    isEnabled: boolean;
-    debug: boolean;
-    ctx: ExecutionContext;
+interface CacheClassOptions extends BaseClassOptions {
     cacheName?: customCaches;
 };
 
-interface baseOptions {
-    key: string;
+interface baseCacheMethodsOptions extends baseMethodsOptions {
     cacheName?: customCaches;
 }
 
-type saveOptions = baseOptions & {
+type setOptions = baseCacheMethodsOptions & {
     value: Response;
 };
-type getOptions = baseOptions;
+type getOptions = baseCacheMethodsOptions;
 
 export type {
+    ICacheClass,
     customCaches,
-    ClassOptions,
-    saveOptions,
+    CacheClassOptions,
+
+    setOptions,
     getOptions,
 }

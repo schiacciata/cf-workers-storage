@@ -1,28 +1,32 @@
+import { BaseClassOptions, baseMethodsOptions, IBaseClass } from "./Base";
 import Env from "./Env";
 
 type buckets = keyof Env;
-interface ClassOptions {
-    isEnabled: boolean;
-    debug: boolean;
-    env: Env;
-    ctx: ExecutionContext;
-    bucketName?: buckets;
+interface IR2Class extends IBaseClass {
+    env: Env
+    bucketName: buckets;
 };
 
-interface baseOptions {
+interface R2ClassOptions extends BaseClassOptions {
+    bucketName?: buckets;
+    env: Env;
+};
+
+interface baseR2MethodsOptions extends baseMethodsOptions {
     bucketName?: buckets;
     key: string;
 }
 
-type saveOptions = baseOptions & {
+type setOptions = baseR2MethodsOptions & {
     value: string | ReadableStream | ArrayBuffer | Blob | ArrayBufferView | null;
 };
-
-type getOptions = baseOptions;
+type getOptions = baseR2MethodsOptions;
 
 export type {
+    IR2Class,
     buckets,
-    ClassOptions,
-    saveOptions,
+    R2ClassOptions,
+    
+    setOptions,
     getOptions,
 }
