@@ -23,18 +23,18 @@ class R2Manager extends BaseManager implements IR2Class {
         return await this.getBucket(bucketName).get(key);
     };
 
-    public set({
+    public async set({
         bucketName,
         key,
         value,
-    }: setOptions): void {
+    }: setOptions): Promise<void | R2Object> {
         if (!this.isEnabled) return this.log('Not enabled');
         if (!key || !value) return this.log('Key or value is missing');
         
         const bucket = this.getBucket(bucketName);
 
         this.log('Saving to bucket', { key, bucket });
-        return this.context.waitUntil(bucket.put(key, value));
+        return await bucket.put(key, value);
     }
 
     private getBucket(name: buckets = this.bucketName): R2Bucket {
