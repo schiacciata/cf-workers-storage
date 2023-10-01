@@ -1,3 +1,1 @@
-export default interface Env {
-    [key: string]: string | KVNamespace | R2Bucket;
-};
+export default interface Env extends Record<string, any> {};
