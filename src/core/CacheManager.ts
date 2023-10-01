@@ -12,12 +12,13 @@ class CacheManager extends BaseManager implements ICacheClass {
     public async get({
         cacheName,
         key,
+        options,
     }: getOptions): Promise<Response | undefined> {
         if (!this.isEnabled) return;
         
         const cache = await this.getCache(cacheName);
         this.log('Matching cache', { key });
-        return await cache.match(key);
+        return await cache.match(key, options);
     };
 
     public async set({

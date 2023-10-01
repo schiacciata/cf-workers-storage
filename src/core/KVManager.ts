@@ -15,29 +15,34 @@ class KVManager extends BaseManager implements IKVClass {
     public async get({
         kvName,
         key,
+        options,
     }: getOptions): Promise<string | null> {
         if (!this.isEnabled) return null;
         if (!key) return null;
         
         this.log('Getting from kv', { key });
-        return await this.getKV(kvName).get(key);
+        return await this
+            .getKV(kvName)
+            .get(key, options);
     };
 
     public set({
         kvName,
         key,
         value,
+        options,
     }: setOptions): void {
         if (!this.isEnabled) return this.log('Not enabled');
         if (!key || !value) return this.log('Key or value is missing');
-        
-        const kv = this.getKV(kvName);
 
-        this.log('Saving to kv', { key, kv });
-        return this.context.waitUntil(kv.put(key, value));
+        this.log('Saving to kv', { key });
+        return this.context.waitUntil(this
+            .getKV(kvName)
+            .put(key, value, options));
     }
 
     private getKV(name: kvs = this.kvName): KVNamespace {
+        if (!name) throw new Error(`kv name not provided`);
         const kv = this.env[name];
         if (!kv) throw new Error(`kv ${name} not found`);
         
