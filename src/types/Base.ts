@@ -21,6 +21,10 @@ type setOptions <T> = baseMethodsOptions & {
 };
 type getOptions = baseMethodsOptions;
 
+type FilterKeysByValueType<T, ValueType> = {
+    [K in keyof T]: T[K] extends ValueType ? K : never;
+};  
+
 export type {
     IBaseClass,
     BaseClassOptions,
@@ -28,4 +32,6 @@ export type {
     baseMethodsOptions,
     setOptions,
     getOptions,
+
+    FilterKeysByValueType,
 }
