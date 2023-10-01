@@ -16,7 +16,9 @@ interface baseCacheMethodsOptions extends baseMethodsOptions {
 type setOptions = baseCacheMethodsOptions & {
     value: Response;
 };
-type getOptions = baseCacheMethodsOptions;
+type getOptions = baseCacheMethodsOptions & {
+    options?: CacheQueryOptions
+};
 
 export type {
     ICacheClass,
