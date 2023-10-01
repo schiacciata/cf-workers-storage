@@ -1,7 +1,8 @@
-import { BaseClassOptions, baseMethodsOptions, IBaseClass } from "./Base";
+import { BaseClassOptions, baseMethodsOptions, FilterKeysByValueType, IBaseClass } from "./Base";
 import Env from "./Env";
 
-type buckets = keyof Env;
+type BucketKeys = FilterKeysByValueType<Env, R2Bucket>;
+type buckets = BucketKeys[keyof BucketKeys];
 interface IR2Class extends IBaseClass {
     env: Env
     bucketName: buckets;
@@ -19,6 +20,7 @@ interface baseR2MethodsOptions extends baseMethodsOptions {
 
 type setOptions = baseR2MethodsOptions & {
     value: string | ReadableStream | ArrayBuffer | Blob | ArrayBufferView | null;
+    options?: R2PutOptions;
 };
 type getOptions = baseR2MethodsOptions;
 

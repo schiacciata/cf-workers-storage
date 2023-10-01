@@ -1,7 +1,9 @@
-import { BaseClassOptions, baseMethodsOptions, IBaseClass } from "./Base";
+import { BaseClassOptions, baseMethodsOptions, FilterKeysByValueType, IBaseClass } from "./Base";
 import Env from "./Env";
 
-type kvs = keyof Env;
+type KVNamespaceKeys = FilterKeysByValueType<Env, KVNamespace>;
+type kvs = KVNamespaceKeys[keyof KVNamespaceKeys];
+
 interface IKVClass extends IBaseClass {
     env: Env;
     kvName: kvs;
@@ -18,8 +20,11 @@ interface baseKVMethodsOptions extends baseMethodsOptions {
 
 type setOptions = baseKVMethodsOptions & {
     value: string | ReadableStream | ArrayBuffer | ArrayBufferView;
+    options?: KVNamespacePutOptions;
 };
-type getOptions = baseKVMethodsOptions;
+type getOptions = baseKVMethodsOptions & {
+    options?: Partial<KVNamespaceGetOptions<undefined>>;
+};
 
 export type {
     IKVClass,
