@@ -22,9 +22,12 @@ type setOptions = baseKVMethodsOptions & {
     value: string | ReadableStream | ArrayBuffer | ArrayBufferView;
     options?: KVNamespacePutOptions;
 };
+
 type getOptions = baseKVMethodsOptions & {
     options?: Partial<KVNamespaceGetOptions<undefined>>;
 };
+
+type deleteOptions = baseKVMethodsOptions & {};
 
 export type {
     IKVClass,
@@ -33,4 +36,5 @@ export type {
     
     setOptions,
     getOptions,
+    deleteOptions,
 }
