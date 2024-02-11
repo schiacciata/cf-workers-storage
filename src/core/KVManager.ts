@@ -1,4 +1,4 @@
-import { IKVClass, kvs, KVClassOptions, getOptions, setOptions } from "../types/KVManager";
+import { IKVClass, kvs, KVClassOptions, getOptions, setOptions, deleteOptions } from "../types/KVManager";
 import Env from "../types/Env";
 import BaseManager from "./Base";
 
@@ -40,6 +40,18 @@ class KVManager extends BaseManager implements IKVClass {
             .getKV(kvName)
             .put(key, value, options));
     }
+
+    public async delete({
+        kvName,
+        key,
+    }: deleteOptions): Promise<void> {
+        if (!this.isEnabled) return;
+        
+        this.log('Deleting from kv', { key });
+        return await this
+            .getKV(kvName)
+            .delete(key);
+    };
 
     private getKV(name: kvs = this.kvName): KVNamespace {
         if (!name) throw new Error(`kv name not provided`);
