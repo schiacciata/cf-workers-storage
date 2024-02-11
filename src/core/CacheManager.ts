@@ -34,6 +34,19 @@ class CacheManager extends BaseManager implements ICacheClass {
         return this.context.waitUntil(cache.put(key, value.clone()));
     };
 
+    public async delete({
+        cacheName,
+        key,
+        options,
+    }: getOptions): Promise<boolean> {
+        if (!this.isEnabled) return false;
+        
+        const cache = await this.getCache(cacheName);
+
+        this.log('Deleting cache', { key });
+        return await cache.delete(key, options);
+    };
+
     private async getCache(name: customCaches = this.cacheName): Promise<Cache> {
         let cache: Cache | undefined;
 
